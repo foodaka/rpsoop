@@ -3,6 +3,8 @@
 
 # player , hands
 
+require 'pry'
+
 class Player
   attr_accessor :choice
   attr_reader :name
@@ -22,15 +24,13 @@ class Human < Player
   def pick_hand
     begin
       puts "pick one (r,p,s)"
-      choice = gets.chomp.downcase
+      self.choice = gets.chomp.downcase
     end until Game::CHOICES.keys.include?(choice)
-
   end
 end
 
 
 class Computer < Player
-  
   def pick_hand
     self.choice = Game::CHOICES.keys.sample
   end
@@ -58,10 +58,11 @@ class Game
     end
 end
 
+
   def compare_hands
-  if player.choice == computer.choice
-    puts "its a tie"
-  elsif player.choice == 'p' && computer.choice == 'r' || player.choice =='r' && computer.choice =='s'|| player.choice =='s' && computer.choice == 'p'
+    if player.choice == computer.choice
+      puts "its a tie"
+    elsif player.choice == 'p' && computer.choice == 'r' || player.choice =='r' && computer.choice =='s'|| player.choice =='s' && computer.choice == 'p'
       winning_message(player.choice)
       puts "you won"
     else
@@ -72,11 +73,16 @@ end
 
 
   def play
-    player.pick_hand
-    computer.pick_hand
-    compare_hands
+    loop do 
+    begin
+      player.pick_hand
+      computer.pick_hand
+      compare_hands
+      puts "would you like to play again?y/n?"
+     break if gets.chomp.downcase != 'y'
+    end
+   end
   end
-
 end
 
   game = Game.new.play
